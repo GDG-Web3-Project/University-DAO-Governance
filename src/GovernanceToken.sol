@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
+// [LEARNING]: Uses ERC20Votes. This means we use 'Snapshots'. Your voting power is locked the moment a proposal starts to prevent last-minute buying/cheating.
 contract GovernanceToken is ERC20, ERC20Permit, ERC20Votes {
     constructor() ERC20("GovernanceToken", "GOV") ERC20Permit("GovernanceToken") {
         _mint(msg.sender, 1000000 * 10**decimals()); // Mint 1M tokens to deployer

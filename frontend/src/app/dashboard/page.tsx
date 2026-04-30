@@ -60,25 +60,25 @@ export default function DashboardPage() {
   const recentActivity = [
     {
       type: 'vote',
-      description: 'You voted "For" on proposal #3',
+      description: 'You voted "For" on petition #3',
       time: '2 hours ago',
       icon: '🗳️'
     },
     {
-      type: 'proposal',
-      description: 'New proposal created: "Q4 Marketing Budget"',
+      type: 'petition',
+      description: 'New petition created: "Q4 Marketing Budget"',
       time: '1 day ago',
       icon: '📝'
     },
     {
       type: 'execution',
-      description: 'Proposal #1 executed successfully',
+      description: 'Petition #1 executed successfully',
       time: '2 days ago',
       icon: '⚡'
     },
     {
       type: 'vote',
-      description: 'Proposal #2 reached quorum',
+      description: 'Petition #2 reached quorum',
       time: '3 days ago',
       icon: '🎯'
     }
@@ -102,7 +102,7 @@ export default function DashboardPage() {
               <div className="mt-4 lg:mt-0">
                 <Link
                   href="/create"
-                  className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2"
+                  className="px-6 py-3 bg-gradient-to-red from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2"
                 >
                   <span>✨</span>
                   Create Proposal
@@ -120,7 +120,7 @@ export default function DashboardPage() {
                 style={{ animationDelay: `${0.3 + index * 0.1}s` }}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div className={`w-12 h-12 bg-gradient-to-r ${stat.color} rounded-xl flex items-center justify-center text-2xl`}>
+                  <div className={`w-12 h-12 bg-gradient-to-red ${stat.color} rounded-xl flex items-center justify-center text-2xl`}>
                     {stat.icon}
                   </div>
                   <div className="text-right">
@@ -140,7 +140,7 @@ export default function DashboardPage() {
             <div className="lg:col-span-2 animate-fade-in" style={{ animationDelay: '0.6s' }}>
               <div className="glass rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-slate-100">Recent Proposals</h2>
+                  <h2 className="text-2xl font-bold text-slate-100">Recent Petitions</h2>
                   <Link
                     href="/proposals"
                     className="text-emerald-400 hover:text-emerald-300 transition-colors text-sm font-medium"
@@ -188,11 +188,11 @@ export default function DashboardPage() {
                     <div className="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
                       <span className="text-3xl">📋</span>
                     </div>
-                    <h3 className="text-lg font-semibold text-slate-100 mb-2">No proposals yet</h3>
-                    <p className="text-slate-400 mb-4">Be the first to create a proposal for the DAO</p>
+                    <h3 className="text-lg font-semibold text-slate-100 mb-2">No petitions yet</h3>
+                    <p className="text-slate-400 mb-4">Be the first to create a petition for the DAO</p>
                     <Link
                       href="/create"
-                      className="px-6 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg font-semibold transition-all duration-200"
+                      className="px-6 py-2 bg-gradient-to-red from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg font-semibold transition-all duration-200"
                     >
                       Create Proposal
                     </Link>
@@ -209,7 +209,7 @@ export default function DashboardPage() {
                 <div className="space-y-4">
                   {recentActivity.map((activity, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-slate-800/30 rounded-lg">
-                      <div className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
+                      <div className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center text-lg shrink-0">
                         {activity.icon}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -249,8 +249,8 @@ export default function DashboardPage() {
                   <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <span className="text-2xl">📝</span>
                   </div>
-                  <h3 className="font-semibold text-slate-100 mb-2">Create Proposal</h3>
-                  <p className="text-slate-400 text-sm">Submit a new proposal for community voting</p>
+                  <h3 className="font-semibold text-slate-100 mb-2">Create Petition</h3>
+                  <p className="text-slate-400 text-sm">Submit a new petition for community voting</p>
                 </Link>
 
                 <Link
@@ -260,7 +260,7 @@ export default function DashboardPage() {
                   <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <span className="text-2xl">🗳️</span>
                   </div>
-                  <h3 className="font-semibold text-slate-100 mb-2">Vote on Proposals</h3>
+                  <h3 className="font-semibold text-slate-100 mb-2">Vote on Petitions</h3>
                   <p className="text-slate-400 text-sm">Participate in active governance decisions</p>
                 </Link>
 

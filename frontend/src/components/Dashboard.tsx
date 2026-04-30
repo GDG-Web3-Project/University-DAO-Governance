@@ -116,10 +116,10 @@ const Dashboard = () => {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
           <div className="mb-6 lg:mb-0">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-2">
-              Active Proposals
+              Active Petitions
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Review and vote on community proposals
+              Review and vote on community petitions
             </p>
           </div>
 
@@ -138,7 +138,7 @@ const Dashboard = () => {
               className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-700 text-white rounded-xl hover:from-blue-700 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl flex items-center gap-2 font-semibold"
             >
               <span className="text-xl">✨</span>
-              Create Proposal
+              Create Petition
             </button>
           </div>
         </div>
@@ -166,18 +166,18 @@ const Dashboard = () => {
             </div>
 
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              No Active Proposals Yet
+              No Active Petitions Yet
             </h2>
 
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
-              Be the first to create a proposal and start shaping the future of our DAO!
+              Be the first to create a petition and start shaping the future of our DAO!
             </p>
 
             <button
               onClick={handleCreateProposal}
               className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl font-semibold text-lg"
             >
-              Create the First Proposal
+              Create the First Petition
             </button>
           </div>
         )}

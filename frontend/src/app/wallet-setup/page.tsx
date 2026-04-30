@@ -49,7 +49,7 @@ export default function WalletSetupPage() {
           <div className="text-center mb-16 animate-fade-in">
             <h1 className="text-5xl font-bold text-slate-100 mb-6">
               Get Started with
-              <span className="block bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-red from-emerald-400 to-teal-400 bg-clip-text text-transparent">
                 Web3 Wallets
               </span>
             </h1>
@@ -62,12 +62,10 @@ export default function WalletSetupPage() {
           {/* What is a Wallet Section */}
           <div className="mb-16 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             <div className="glass rounded-2xl p-8 max-w-4xl mx-auto">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-slate-100 mb-4">What is a Web3 Wallet?</h2>
-                <p className="text-slate-400 text-lg">
-                  Think of it as your digital bank account for the decentralized internet
-                </p>
-              </div>
+              <h2 className="text-3xl font-bold text-slate-100 mb-4">What is a Web3 Wallet?</h2>
+              <p className="text-slate-400 text-lg">
+                Think of it as your digital student ID for the decentralized university
+              </p>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
@@ -90,24 +88,17 @@ export default function WalletSetupPage() {
                     <div>
                       <h3 className="font-semibold text-slate-100 mb-2">Voting Power</h3>
                       <p className="text-slate-400 text-sm">
-                        Use your governance tokens to vote on proposals and influence DAO decisions.
+                        Use your student voting power to vote on campus petitions and influence university decisions.
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-emerald-700 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🌐</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-slate-100 mb-2">DApp Access</h3>
+<h3 className="font-semibold text-slate-100 mb-2">Campus Petitions</h3>
                       <p className="text-slate-400 text-sm">
-                        Connect to decentralized applications and interact with smart contracts.
+                        Connect to decentralized applications and interact with smart contracts for university governance.
                       </p>
-                    </div>
-                  </div>
 
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-teal-700 rounded-lg flex items-center justify-center flex-shrink-0">

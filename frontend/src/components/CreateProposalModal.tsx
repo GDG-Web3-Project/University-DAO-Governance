@@ -61,7 +61,7 @@ const CreateProposalModal = ({ onClose }: CreateProposalModalProps) => {
                 <span className="text-2xl">📝</span>
               </div>
               <div>
-                <h2 className="text-2xl font-bold">Create New Proposal</h2>
+                <h2 className="text-2xl font-bold">Create New Petition</h2>
                 <p className="text-blue-100 text-sm">Submit your idea to the community</p>
               </div>
             </div>
@@ -254,7 +254,7 @@ const CreateProposalModal = ({ onClose }: CreateProposalModalProps) => {
               ) : (
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-lg"></span>
-                  Create Proposal
+                  Create Petition
                 </div>
               )}
             </button>

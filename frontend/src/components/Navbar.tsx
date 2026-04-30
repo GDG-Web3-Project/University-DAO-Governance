@@ -17,7 +17,7 @@ export default function Navbar() {
   const navItems = [
     { href: '/', label: 'Home' },
     { href: '/dashboard', label: 'Dashboard', protected: true },
-    { href: '/proposals', label: 'Proposals', protected: true },
+    { href: '/proposals', label: 'Campus Petitions', protected: true },
     { href: '/create', label: 'Create', protected: true },
   ];
 

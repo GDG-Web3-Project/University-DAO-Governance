@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 
+// [LEARNING]: Quorum is set to 4%. A petition only counts as 'Passed' if at least 4% of the student body participates.
 contract GovernorContract is Governor, GovernorSettings, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
     constructor(IVotes _token, TimelockController _timelock)
         Governor("GovernorContract")

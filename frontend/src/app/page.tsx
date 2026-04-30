@@ -60,8 +60,8 @@ export default function LandingPage() {
                 </span>
               </h1>
               <p className="text-xl lg:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed">
-                Join a community-driven DAO where token holders vote on proposals,
-                control treasury funds, and shape the future of decentralized governance.
+                Join a community-driven DAO where token holders vote on campus petitions,
+                control treasury funds, and shape the future of decentralized university governance.
               </p>
             </div>
 
@@ -94,7 +94,7 @@ export default function LandingPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-slate-100 mb-2">Token-Based Voting</h3>
                   <p className="text-slate-400 text-sm">
-                    Vote on proposals with your governance tokens. Your voting power reflects your stake in the community.
+                    Vote on campus petitions with your student voting power. Your voting power reflects your stake in the community.
                   </p>
                 </div>
 
@@ -143,20 +143,20 @@ export default function LandingPage() {
               },
               {
                 step: "02",
-                title: "Review Proposals",
-                description: "Browse active proposals and understand their impact",
+                title: "Review Petitions",
+                description: "Browse active campus petitions and understand their impact",
                 icon: "📋"
               },
               {
                 step: "03",
                 title: "Cast Your Vote",
-                description: "Use your voting power to support or oppose proposals",
+                description: "Use your voting power to support or oppose campus petitions",
                 icon: "🗳️"
               },
               {
                 step: "04",
                 title: "Execute Decisions",
-                description: "Approved proposals are executed through smart contracts",
+                description: "Approved petitions are executed through smart contracts",
                 icon: "⚡"
               }
             ].map((item, index) => (

@@ -6,18 +6,8 @@ import Link from 'next/link';
 import { useDAO } from '@/contexts/DAOContext';
 import Navbar from '@/components/Navbar';
 
-interface Proposal {
-  id: number;
-  description: string;
-  state: string;
-  forVotes: number;
-  againstVotes: number;
-  endTime: number;
-  proposer?: string;
-}
-
 export default function ProposalsPage() {
-  const { isConnected, proposals, loadProposals } = useDAO();
+  const { isConnected, proposals, classElections, loadProposals, loadClassElections } = useDAO();
   const router = useRouter();
   const [filter, setFilter] = useState<'all' | 'active' | 'passed' | 'rejected' | 'executed'>('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,63 +17,16 @@ export default function ProposalsPage() {
       router.push('/');
       return;
     }
-    loadProposals();
-  }, [isConnected, router, loadProposals]);
+    Promise.all([loadProposals(), loadClassElections()]);
+  }, [isConnected, router, loadProposals, loadClassElections]);
 
   if (!isConnected) {
     return null;
   }
 
-  // Mock data for demonstration - in real app this would come from the contract
-  const mockProposals: Proposal[] = [
-    {
-      id: 1,
-      description: "Fund Q4 Marketing Campaign - $50,000 budget for community growth initiatives",
-      state: "Active",
-      forVotes: 125000,
-      againstVotes: 25000,
-      endTime: Date.now() + 86400000 * 3, // 3 days from now
-      proposer: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
-    },
-    {
-      id: 2,
-      description: "Upgrade Smart Contracts - Implement gas optimization and security improvements",
-      state: "Active",
-      forVotes: 98000,
-      againstVotes: 52000,
-      endTime: Date.now() + 86400000 * 7, // 7 days from now
-      proposer: "0x8ba1f109551bD432803012645261768497d"
-    },
-    {
-      id: 3,
-      description: "Partnership with DeFi Protocol - Strategic alliance for cross-platform integration",
-      state: "Succeeded",
-      forVotes: 200000,
-      againstVotes: 30000,
-      endTime: Date.now() - 86400000 * 2, // 2 days ago
-      proposer: "0x3f4E77b8c2a7c3b9F8c1D2e3A4b5C6d7E8f9A0b"
-    },
-    {
-      id: 4,
-      description: "Community Treasury Allocation - Distribute 10% of treasury to active contributors",
-      state: "Defeated",
-      forVotes: 75000,
-      againstVotes: 125000,
-      endTime: Date.now() - 86400000 * 5, // 5 days ago
-      proposer: "0x1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s0T"
-    },
-    {
-      id: 5,
-      description: "Launch NFT Collection - Create limited edition governance NFTs for members",
-      state: "Executed",
-      forVotes: 180000,
-      againstVotes: 20000,
-      endTime: Date.now() - 86400000 * 10, // 10 days ago
-      proposer: "0x9A8b7C6d5E4f3G2h1I0j9K8l7M6n5O4p3Q2r1S0t"
-    }
-  ];
+  const allProposals = [...classElections, ...proposals];
 
-  const filteredProposals = mockProposals.filter(proposal => {
+  const filteredProposals = allProposals.filter((proposal) => {
     const matchesFilter = filter === 'all' ||
       (filter === 'active' && proposal.state === 'Active') ||
       (filter === 'passed' && proposal.state === 'Succeeded') ||
@@ -91,7 +34,7 @@ export default function ProposalsPage() {
       (filter === 'executed' && proposal.state === 'Executed');
 
     const matchesSearch = proposal.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      proposal.id.toString().includes(searchTerm);
+      proposal.id.includes(searchTerm);
 
     return matchesFilter && matchesSearch;
   });
@@ -139,9 +82,9 @@ export default function ProposalsPage() {
           <div className="mb-8 animate-fade-in">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <h1 className="text-4xl font-bold text-slate-100 mb-2">Proposals</h1>
+                <h1 className="text-4xl font-bold text-slate-100 mb-2">Campus Petitions</h1>
                 <p className="text-slate-400">
-                  Browse and vote on community proposals
+                  Browse and vote on community petitions
                 </p>
               </div>
               <div className="mt-4 lg:mt-0">
@@ -150,7 +93,7 @@ export default function ProposalsPage() {
                   className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2"
                 >
                   <span>✨</span>
-                  Create Proposal
+                  Create Petition
                 </Link>
               </div>
             </div>
@@ -165,7 +108,7 @@ export default function ProposalsPage() {
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Search proposals..."
+                      placeholder="Search petitions..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
@@ -181,11 +124,11 @@ export default function ProposalsPage() {
                 {/* Filters */}
                 <div className="flex flex-wrap gap-2">
                   {[
-                    { key: 'all', label: 'All', count: mockProposals.length },
-                    { key: 'active', label: 'Active', count: mockProposals.filter(p => p.state === 'Active').length },
-                    { key: 'passed', label: 'Passed', count: mockProposals.filter(p => p.state === 'Succeeded').length },
-                    { key: 'rejected', label: 'Rejected', count: mockProposals.filter(p => p.state === 'Defeated').length },
-                    { key: 'executed', label: 'Executed', count: mockProposals.filter(p => p.state === 'Executed').length }
+                    { key: 'all', label: 'All', count: allProposals.length },
+                    { key: 'active', label: 'Active', count: allProposals.filter((p) => p.state === 'Active').length },
+                    { key: 'passed', label: 'Passed', count: allProposals.filter((p) => p.state === 'Succeeded').length },
+                    { key: 'rejected', label: 'Rejected', count: allProposals.filter((p) => p.state === 'Defeated').length },
+                    { key: 'executed', label: 'Executed', count: allProposals.filter((p) => p.state === 'Executed').length }
                   ].map(({ key, label, count }) => (
                     <button
                       key={key}
@@ -230,7 +173,7 @@ export default function ProposalsPage() {
                     </div>
 
                     <h3 className="text-lg font-semibold text-slate-100 mb-3 line-clamp-2 group-hover:text-emerald-400 transition-colors">
-                      {proposal.description}
+                      {proposal.title}
                     </h3>
 
                     <div className="space-y-3 mb-4">
@@ -254,9 +197,9 @@ export default function ProposalsPage() {
                     </div>
 
                     <div className="flex items-center justify-between text-sm text-slate-400">
-                      <span>Proposal #{proposal.id}</span>
+                      <span>{proposal.scope === 'class' ? 'Class' : 'Public'} #{proposal.id}</span>
                       <span className={proposal.state === 'Active' ? 'text-emerald-400' : 'text-slate-500'}>
-                        {formatTimeLeft(proposal.endTime)}
+                        {formatTimeLeft(proposal.endAt)}
                       </span>
                     </div>
 
@@ -264,7 +207,7 @@ export default function ProposalsPage() {
                       <div className="flex items-center gap-2 text-xs text-slate-500">
                         <span>By:</span>
                         <span className="font-mono">
-                          {proposal.proposer ? `${proposal.proposer.slice(0, 6)}...${proposal.proposer.slice(-4)}` : 'Unknown'}
+                          {proposal.author ? `${proposal.author.slice(0, 6)}...${proposal.author.slice(-4)}` : 'Unknown'}
                         </span>
                       </div>
                     </div>
@@ -276,9 +219,9 @@ export default function ProposalsPage() {
                 <div className="w-24 h-24 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
                   <span className="text-5xl">🔍</span>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-100 mb-2">No proposals found</h3>
+                <h3 className="text-2xl font-bold text-slate-100 mb-2">No petitions found</h3>
                 <p className="text-slate-400 mb-6">
-                  {searchTerm ? 'Try adjusting your search terms or filters' : 'No proposals match the selected filter'}
+                  {searchTerm ? 'Try adjusting your search terms or filters' : 'No petitions match the selected filter'}
                 </p>
                 <button
                   onClick={() => {
@@ -296,30 +239,30 @@ export default function ProposalsPage() {
           {/* Stats Summary */}
           <div className="mt-12 animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <div className="glass rounded-2xl p-6">
-              <h2 className="text-2xl font-bold text-slate-100 mb-6">Proposal Statistics</h2>
+<h2 className="text-2xl font-bold text-slate-100 mb-6">Petition Statistics</h2>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-emerald-400 mb-2">
-                    {mockProposals.filter(p => p.state === 'Active').length}
+                    {allProposals.filter((p) => p.state === 'Active').length}
                   </div>
-                  <div className="text-slate-400 text-sm">Active</div>
+                  <div className="text-slate-400 text-sm">Petitions</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-blue-400 mb-2">
-                    {mockProposals.filter(p => p.state === 'Succeeded').length}
+                    {allProposals.filter((p) => p.state === 'Succeeded').length}
                   </div>
                   <div className="text-slate-400 text-sm">Passed</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-red-400 mb-2">
-                    {mockProposals.filter(p => p.state === 'Defeated').length}
+                    {allProposals.filter((p) => p.state === 'Defeated').length}
                   </div>
                   <div className="text-slate-400 text-sm">Rejected</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-purple-400 mb-2">
-                    {mockProposals.filter(p => p.state === 'Executed').length}
+                    {allProposals.filter((p) => p.state === 'Executed').length}
                   </div>
                   <div className="text-slate-400 text-sm">Executed</div>
                 </div>

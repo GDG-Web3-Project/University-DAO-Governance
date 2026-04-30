@@ -22,16 +22,28 @@ A modern, responsive frontend for the decentralized governance DAO built with Ne
 ## Getting Started
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
-2. Start the development server:
+2. Configure environment:
+```bash
+cp .env.example .env.local
+```
+
+Optional local demo chain:
+- keep `NEXT_PUBLIC_ENABLE_LOCAL_DEMO_CHAIN=true`
+- run a local chain at `http://127.0.0.1:8545`
+- set local contract addresses in `.env.local`
+
+3. Start the development server:
+
 ```bash
 npm run dev
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## User Journey
 
@@ -45,6 +57,7 @@ npm run dev
 ## Smart Contract Integration
 
 The frontend interacts with three main contracts:
+
 - **GovernanceToken**: ERC20Votes for token holding and delegation
 - **GovernorContract**: Manages proposals, voting, and execution
 - **TimelockController**: Enforces 2-day delay on fund movements

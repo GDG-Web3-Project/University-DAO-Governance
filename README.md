@@ -24,6 +24,7 @@ The project uses Foundry for comprehensive testing:
 - Gas usage analysis
 
 Run tests with:
+
 ```bash
 forge test
 ```
@@ -41,6 +42,7 @@ forge script script/Deploy.s.sol --broadcast --rpc-url <your-rpc-url>
 A modern, responsive Next.js frontend is included in the `frontend/` directory.
 
 ### Features
+
 - Connect MetaMask wallet
 - View token balance and voting power
 - Create and vote on proposals
@@ -48,6 +50,7 @@ A modern, responsive Next.js frontend is included in the `frontend/` directory.
 - Responsive design with dark mode
 
 ### Setup
+
 ```bash
 cd frontend
 npm install

@@ -130,7 +130,7 @@ export default function WalletConnectModal({ onClose }: WalletConnectModalProps)
               <div>
                 <h4 className="font-semibold text-slate-100 mb-1">New to Web3?</h4>
                 <p className="text-slate-400 text-sm mb-3">
-                  A wallet lets you securely connect to the DAO platform, vote on proposals, and interact with treasury governance.
+                  A wallet lets you securely connect to the DAO platform, vote on campus petitions, and interact with treasury governance.
                 </p>
                 <a
                   href="/wallet-setup"
