@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 const STORAGE_KEY = 'university-dao-token';
 
 export const getStoredToken = () => {

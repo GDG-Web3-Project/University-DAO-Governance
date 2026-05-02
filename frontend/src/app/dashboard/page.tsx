@@ -177,7 +177,7 @@ export default function DashboardPage() {
                             {proposal.forVotes + proposal.againstVotes} votes
                           </div>
                           <div className="text-slate-400 text-sm">
-                            {Math.floor((proposal.endTime - Date.now()) / (1000 * 60 * 60 * 24))} days left
+                            {Math.floor((proposal.endAt - Date.now()) / (1000 * 60 * 60 * 24))} days left
                           </div>
                         </div>
                       </div>

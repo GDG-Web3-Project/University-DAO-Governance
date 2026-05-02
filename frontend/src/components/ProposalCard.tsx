@@ -5,12 +5,12 @@ import { useDAO } from '@/contexts/DAOContext';
 import VoteModal from './VoteModal';
 
 interface Proposal {
-  id: number;
+  id: string;
   description: string;
   state: string;
   forVotes: number;
   againstVotes: number;
-  endTime: number;
+  endAt: number;
 }
 
 interface ProposalCardProps {
@@ -27,14 +27,14 @@ const ProposalCard = ({ proposal }: ProposalCardProps) => {
 
   useEffect(() => {
     const updateTimeLeft = () => {
-      setTimeLeft(Math.max(0, Math.floor((proposal.endTime - Date.now()) / (1000 * 60 * 60 * 24))));
+      setTimeLeft(Math.max(0, Math.floor((proposal.endAt - Date.now()) / (1000 * 60 * 60 * 24))));
     };
     
     updateTimeLeft();
     const interval = setInterval(updateTimeLeft, 60000); // Update every minute
     
     return () => clearInterval(interval);
-  }, [proposal.endTime]);
+  }, [proposal.endAt]);
 
   const getStateColor = (state: string) => {
     switch (state) {

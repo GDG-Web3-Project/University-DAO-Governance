@@ -4,22 +4,19 @@ import { useState } from 'react';
 import { useDAO } from '@/contexts/DAOContext';
 
 interface VoteModalProps {
-  proposalId: number;
+  proposalId: string;
   onClose: () => void;
 }
 
 const VoteModal = ({ proposalId, onClose }: VoteModalProps) => {
-  const { governorContract, votingPower } = useDAO();
+  const { castVote, votingPower } = useDAO();
   const [vote, setVote] = useState<'for' | 'against'>('for');
   const [loading, setLoading] = useState(false);
 
   const handleVote = async () => {
-    if (!governorContract) return;
-
     setLoading(true);
     try {
-      const tx = await governorContract.castVote(proposalId, vote === 'for' ? 1 : 0);
-      await tx.wait();
+      await castVote(proposalId, vote);
       alert('Vote cast successfully!');
       onClose();
     } catch (error) {
