@@ -95,3 +95,19 @@ npm run dev
 4. Assign `PROPOSER_ROLE` and `CANCELLER_ROLE` to (3) on (2).
 5. Assign `EXECUTOR_ROLE` to `address(0)` on (2).
 6. Renounce `TIMELOCK_ADMIN_ROLE` from deployer.
+
+---
+
+## Deployment Verification
+
+The smart contracts have been successfully compiled, optimized, and deployed to the **Base Sepolia** testnet. 
+
+**Terminal Output Trace:**
+```text
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: .../broadcast/Deploy.s.sol/84532/run-latest.json
+Sensitive values saved to: .../cache/Deploy.s.sol/84532/run-latest.json
+```
+
+*(If you have a literal image screenshot of your terminal, you can replace this line with `![Terminal Screenshot](./terminal-screenshot.png)` after saving the image to the repository).*
