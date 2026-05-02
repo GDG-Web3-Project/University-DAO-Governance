@@ -1,77 +1,97 @@
-# Decentralized Governance DAO
+# University DAO Governance: System Specification
 
-This project implements a decentralized autonomous organization (DAO) using smart contracts on Ethereum. The system consists of three main components: a governance token, a governor contract, and a timelock controller.
+A hybrid on-chain governance protocol and off-chain indexing engine designed for academic environments.
 
-## Architecture
+## Core Architecture
 
-- **GovernanceToken**: An ERC20 token with voting capabilities (ERC20Votes) that allows token holders to participate in governance.
-- **GovernorContract**: Manages proposals, voting, and execution through the timelock.
-- **Timelock**: A time-locked controller that holds the treasury funds and enforces delays on proposal execution.
+### 1. On-Chain State Machine (EVM)
+The protocol utilizes a modular governor stack inherited from OpenZeppelin v5.x.
 
-## Features
+#### GovernanceToken.sol
+- **Standard**: ERC20 + ERC20Votes + ERC20Permit.
+- **Checkpointing**: Uses `_burn`, `_mint`, and `_transferVotingUnits` to maintain a historical snapshot of voting power.
+- **Complexity**: O(1) for balance checks, O(log n) for historical voting power lookups via binary search over checkpoints.
 
-- **Proposal Creation**: Token holders can propose actions like fund transfers.
-- **Voting**: Token-weighted voting with configurable delay and period.
-- **Timelock**: Mandatory delay (2 days) before proposal execution.
-- **Quorum**: Minimum 4% of total supply must vote for quorum.
+#### GovernorContract.sol
+- **Inheritance**: Governor, GovernorSettings, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl.
+- **Parameters**:
+    - `votingDelay`: 1 block. Ensures state consistency before voting begins.
+    - `votingPeriod`: 50,400 blocks (fixed).
+    - `quorum`: 4% (dynamic based on total supply at snapshot).
+    - `proposalThreshold`: 0.
+- **State Transitions**: `Pending` -> `Active` -> `Defeated/Succeeded` -> `Queued` -> `Expired/Executed`.
 
-## Testing
+#### Timelock.sol
+- **Mechanism**: `TimelockController`.
+- **Min Delay**: 172,800 seconds (2 days).
+- **Role Map**:
+    - `PROPOSER_ROLE`: Restricted to GovernorContract.
+    - `EXECUTOR_ROLE`: `address(0)` (unrestricted execution of queued, mature proposals).
+    - `CANCELLER_ROLE`: Restricted to GovernorContract.
 
-The project uses Foundry for comprehensive testing:
+#### ClassElection.sol
+- **Logic**: Off-governor election primitive.
+- **Data Structure**: `mapping(uint256 => Election)` storing `startTime`, `endTime`, and `descriptionHash`.
+- **Access Control**: `mapping(uint256 => mapping(address => bool))` for granular whitelisting of voters per election ID.
 
-- Unit tests for the full proposal and voting flow
-- Time travel testing using `vm.warp` and `vm.roll`
-- Gas usage analysis
+### 2. Off-Chain Indexing & Metadata (Node.js/Express)
+Handles ephemeral data and provides a queryable interface for the frontend.
+- **Database**: MongoDB.
+- **Sync Pattern**: Frontend-driven event logging. Upon successful TX broadcast, the frontend pushes metadata to the backend for indexing.
+- **Authentication**: EIP-4361 (Sign-In with Ethereum) compatible flow.
 
-Run tests with:
+### 3. Frontend Implementation (Next.js 15)
+- **Engine**: React 19 + TypeScript.
+- **State management**: Context API for wallet and chain state.
+- **Provider**: Ethers.js v6 via JSON-RPC.
+- **Performance**: Static generation for landing pages with dynamic client-side fetching for proposal status.
 
+---
+
+## Environment Configuration
+
+### Smart Contracts
 ```bash
-forge test
+forge install
+forge build
+forge test --gas-report
 ```
 
-## Deployment
-
-Deploy the contracts using the provided script:
-
+### Backend API
 ```bash
-forge script script/Deploy.s.sol --broadcast --rpc-url <your-rpc-url>
+cd backend
+npm install
+# Required: MONGODB_URI, JWT_SECRET, PORT
+npm start
 ```
 
-## Frontend
-
-A modern, responsive Next.js frontend is included in the `frontend/` directory.
-
-### Features
-
-- Connect MetaMask wallet
-- View token balance and voting power
-- Create and vote on proposals
-- Real-time proposal status updates
-- Responsive design with dark mode
-
-### Setup
-
+### Client Application
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-## User Journey
+---
 
-1. **Proposal**: A token holder submits a proposal (e.g., "Send 5 ETH to Marketing Team").
-2. **Voting**: Other token holders vote "Aye" or "Nay" during the voting period.
-3. **Queue**: If passed, the proposal is queued for execution.
-4. **Execution**: After the timelock delay, the proposal is executed automatically.
+## Security and Invariants
 
-## Security
+### Access Control Invariants
+- `Timelock` MUST be the owner of all governed assets/contracts.
+- `GovernorContract` MUST be the only address with `PROPOSER_ROLE` on the `Timelock`.
+- `ClassElection` admin role should be transferred to `Timelock` post-deployment for fully decentralized control.
 
-- No single person controls the funds; all actions require community approval.
-- Timelock provides a safety window for the community to react.
-- Voting power snapshots prevent manipulation.
+### Voting Integrity
+- Snapshots are triggered at `proposalSnapshot`, preventing double-voting or flash-loan manipulation.
+- `quorum` is checked at the end of the `votingPeriod`.
 
-## Foundry Advantages
+---
 
-- **Fork Testing**: Simulate interactions with real Ethereum assets.
-- **Time Travel**: Test voting and timelock logic instantly.
-- **Fuzzing**: Ensure voting math integrity with random inputs.
+## Deployment Logic
+
+1. Deploy `GovernanceToken`.
+2. Deploy `Timelock` with `minDelay`.
+3. Deploy `GovernorContract` linked to (1) and (2).
+4. Assign `PROPOSER_ROLE` and `CANCELLER_ROLE` to (3) on (2).
+5. Assign `EXECUTOR_ROLE` to `address(0)` on (2).
+6. Renounce `TIMELOCK_ADMIN_ROLE` from deployer.
