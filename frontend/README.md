@@ -1,77 +1,39 @@
-# DAO Governance Frontend
+# Frontend: Client-Side Implementation
 
-A modern, responsive frontend for the decentralized governance DAO built with Next.js, TypeScript, and Tailwind CSS.
+High-performance Web3 interface utilizing Next.js 15 (App Router) and Ethers.js v6.
 
-## Features
+## Architecture
 
-- **Wallet Connection**: Connect MetaMask or other Web3 wallets
-- **Proposal Management**: View, create, and vote on proposals
-- **Real-time Updates**: Live proposal states and voting results
-- **Responsive Design**: Works perfectly on desktop and mobile
-- **Dark Mode**: Automatic dark/light theme support
-- **Modern UI**: Gradient backgrounds, smooth animations, and stunning visuals
+### 1. Provider Strategy
+- **Primary**: `BrowserProvider` (window.ethereum) for state-mutating transactions.
+- **Fallback**: `JsonRpcProvider` for read-only operations when no wallet is connected.
+- **State Management**: React Context API (`Web3Context`) maintains a singleton instance of the signer and provider to prevent redundant RPC calls.
 
-## Tech Stack
+### 2. Contract Interaction Layer
+Located in `src/lib/contracts/`:
+- **Type-Safety**: Direct mapping of Foundry-generated ABIs to TypeScript interfaces.
+- **Gas Estimation**: Explicit `estimateGas` calls before transaction dispatch to prevent "Out of Gas" failures.
+- **Event Listeners**: WebSocket-based listeners for `ProposalCreated` and `VoteCast` events to enable real-time UI updates.
 
-- **Next.js 14** - React framework with app router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first CSS framework
-- **Ethers.js** - Ethereum blockchain interaction
-- **Context API** - State management
+### 3. App Router Structure
+- `/app/proposals`: Server-side fetching of proposal metadata with client-side hydration of real-time voting counts.
+- `/app/create`: Multi-step form for calldata generation (target address, value, signature, data).
+- `/app/dashboard`: Aggregation of on-chain balances (`ERC20Votes.balanceOf`) and off-chain user profiles.
 
-## Getting Started
-
-1. Install dependencies:
-
+## Environment Configuration
 ```bash
-npm install
+NEXT_PUBLIC_GOVERNANCE_TOKEN_ADDRESS=0x...
+NEXT_PUBLIC_GOVERNOR_ADDRESS=0x...
+NEXT_PUBLIC_TIMELOCK_ADDRESS=0x...
+NEXT_PUBLIC_BACKEND_URL=http://localhost:4000
 ```
 
-2. Configure environment:
-```bash
-cp .env.example .env.local
-```
+## Build Pipeline
+- **Bundler**: Turbopack (dev) / Webpack (prod).
+- **Styling**: Tailwind CSS v4 JIT engine.
+- **Validation**: Zod for form schemas and API response validation.
 
-Optional local demo chain:
-- keep `NEXT_PUBLIC_ENABLE_LOCAL_DEMO_CHAIN=true`
-- run a local chain at `http://127.0.0.1:8545`
-- set local contract addresses in `.env.local`
-
-3. Start the development server:
-
-```bash
-npm run dev
-```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## User Journey
-
-1. **Connect Wallet**: Click "Connect Wallet" to link your MetaMask
-2. **View Dashboard**: See your token balance and voting power
-3. **Browse Proposals**: Check active proposals with voting progress
-4. **Create Proposal**: Submit new proposals for fund transfers
-5. **Vote**: Cast votes on active proposals using your voting power
-6. **Track Execution**: Monitor proposal states through queue and execution
-
-## Smart Contract Integration
-
-The frontend interacts with three main contracts:
-
-- **GovernanceToken**: ERC20Votes for token holding and delegation
-- **GovernorContract**: Manages proposals, voting, and execution
-- **TimelockController**: Enforces 2-day delay on fund movements
-
-## UI Highlights
-
-- **Gradient Backgrounds**: Beautiful blue-to-indigo gradients
-- **Card Animations**: Hover effects and smooth transitions
-- **Progress Bars**: Visual voting results
-- **Modal Dialogs**: Clean proposal creation and voting interfaces
-- **Responsive Grid**: Adapts to different screen sizes
-
-## Security
-
-- Client-side validation for proposal creation
-- MetaMask integration for secure transactions
-- Read-only operations for non-connected users
+## Performance Invariants
+- Minimal usage of `useEffect` for chain-state syncing.
+- Heavy utilization of `Server Components` for initial data rendering.
+- Code-splitting on heavy libraries like `ethers`.
