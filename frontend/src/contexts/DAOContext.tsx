@@ -126,17 +126,40 @@ export const DAOProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     let providerFromWallet = new ethers.BrowserProvider(ethereum);
     let network = await providerFromWallet.getNetwork();
     if (isSupportedChain(Number(network.chainId))) return providerFromWallet;
+    
     const baseHex = `0x${BASE_SEPOLIA_CHAIN_ID.toString(16)}`;
     try {
       await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: baseHex }] });
-    } catch {
-      if (ENABLE_LOCAL_DEMO_CHAIN) {
+    } catch (switchError: any) {
+      if (switchError.code === 4902) {
+        try {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: baseHex,
+                chainName: 'Base Sepolia',
+                rpcUrls: ['https://sepolia.base.org'],
+                nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+                blockExplorerUrls: ['https://sepolia.basescan.org/']
+              }
+            ]
+          });
+        } catch (addError) {
+          throw new Error('Failed to add Base Sepolia network.');
+        }
+      } else if (ENABLE_LOCAL_DEMO_CHAIN) {
         const localHex = `0x${LOCAL_CHAIN_ID.toString(16)}`;
-        await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: localHex }] });
+        try {
+          await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: localHex }] });
+        } catch {
+          throw new Error(`Please switch your wallet network to Base Sepolia or Local.`);
+        }
       } else {
         throw new Error(`Please switch your wallet network to Base Sepolia (${BASE_SEPOLIA_CHAIN_ID}).`);
       }
     }
+    
     providerFromWallet = new ethers.BrowserProvider(ethereum);
     network = await providerFromWallet.getNetwork();
     if (!isSupportedChain(Number(network.chainId))) throw new Error('Unsupported network');
