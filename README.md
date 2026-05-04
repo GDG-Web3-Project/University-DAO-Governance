@@ -103,11 +103,4 @@ npm run dev
 The smart contracts have been successfully compiled, optimized, and deployed to the **Base Sepolia** testnet. 
 
 **Terminal Output Trace:**
-```text
-ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
-
-Transactions saved to: .../broadcast/Deploy.s.sol/84532/run-latest.json
-Sensitive values saved to: .../cache/Deploy.s.sol/84532/run-latest.json
-```
-
-*(If you have a literal image screenshot of your terminal, you can replace this line with `![Terminal Screenshot](./terminal-screenshot.png)` after saving the image to the repository).*
+<img width="1151" height="123" alt="image" src="https://github.com/user-attachments/assets/b9dbd82d-2384-4e47-8029-e39671321d8b" />
